@@ -4,7 +4,7 @@ import pandas as pd
 import folium
 from streamlit_folium import folium_static
 
-API_URL = "http://localhost:8000"
+API_URL = "http://api:8000"
 
 st.set_page_config(page_title="Аналитика рынка недвижимости", layout="wide")
 st.title("Аналитика рынка недвижимости")
@@ -303,8 +303,16 @@ with tab6:
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        source = st.selectbox("Источник", options=["cian", "avito"],
-                              format_func=lambda x: "Циан" if x == "cian" else "Авито")
+        source = st.selectbox(
+            "Источник",
+            options=["cian", "avito", "incom", "all"],
+            format_func=lambda x: {
+                "cian": "Циан",
+                "avito": "Авито",
+                "incom": "ИНКОМ",
+                "all": "Все источники"
+            }[x]
+        )
 
     with col2:
         pages = st.number_input("Количество страниц", min_value=1, max_value=10, value=1)

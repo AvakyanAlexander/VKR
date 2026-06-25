@@ -1,13 +1,14 @@
 import psycopg2
 import geohash2
 from difflib import SequenceMatcher
+import os
 
 DB_CONFIG = {
-    "host": "localhost",
-    "port": 5432,
-    "database": "VKR",
-    "user": "Alexs",
-    "password": "root"
+    "host": os.getenv("POSTGRES_HOST", "localhost"),
+    "port": int(os.getenv("POSTGRES_PORT", 5432)),
+    "database": os.getenv("POSTGRES_DB", "VKR"),
+    "user": os.getenv("POSTGRES_USER", "Alexs"),
+    "password": os.getenv("POSTGRES_PASSWORD", "root")
 }
 
 THRESHOLD = 0.75  # Порог для объединения
@@ -124,7 +125,7 @@ def run_deduplication():
                     geohash, canonical_address, latitude, longitude,
                     area_total, area_kitchen, area_living,
                     floor, floors_total, rooms,
-                    building_type, building_year,
+                    building_type, build_year,
                     property_type, metro_station, metro_distance
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING id
@@ -150,7 +151,7 @@ def run_deduplication():
                 last_price_per_sqm = %s,
                 property_type = COALESCE(property_type, %s),
                 building_type = COALESCE(building_type, %s),
-                building_year = COALESCE(building_year, %s),
+                build_year = COALESCE(build_year, %s),
                 metro_station = COALESCE(metro_station, %s),
                 metro_distance = COALESCE(metro_distance, %s),
                 area_kitchen = COALESCE(area_kitchen, %s),

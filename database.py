@@ -1,11 +1,12 @@
 import psycopg2
+import os
 
 DB_CONFIG = {
-    "host": "localhost",
-    "port": 5432,
-    "database": "VKR",
-    "user": "Alexs",
-    "password": "root"
+    "host": os.getenv("POSTGRES_HOST", "localhost"),
+    "port": int(os.getenv("POSTGRES_PORT", 5432)),
+    "database": os.getenv("POSTGRES_DB", "VKR"),
+    "user": os.getenv("POSTGRES_USER", "Alexs"),
+    "password": os.getenv("POSTGRES_PASSWORD", "root")
 }
 
 def get_connection():
@@ -200,7 +201,7 @@ def save_to_db(data: dict, url: str, external_id: str, source: str = "cian"):
     conn.commit()
     cursor.close()
     conn.close()
-    print(f"✅ Сохранено: {data.get('title_name', '')[:60]}...")
+    print(f"Сохранено: {data.get('title_name', '')[:60]}...")
 
 if __name__ == "__main__":
     create_tables()
